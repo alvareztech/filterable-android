@@ -1,11 +1,14 @@
 package tech.alvarez.filterable
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Bitmap.CompressFormat
+import android.graphics.ImageDecoder
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
@@ -21,6 +24,21 @@ fun Context.toast(message: String) = Toast.makeText(this, message, Toast.LENGTH_
 
 fun Context.log(message: String) {
     if (BuildConfig.DEBUG) Log.d(this::class.java.simpleName, message)
+}
+
+fun Activity.openGallery() {
+    val intent = android.content.Intent(android.content.Intent.ACTION_GET_CONTENT)
+    intent.type = "image/*"
+    if (intent.resolveActivity(packageManager) != null) {
+        startActivityForResult(intent, 777)
+    }
+}
+
+fun Uri.bitmap(context: Context): Bitmap? = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
+    MediaStore.Images.Media.getBitmap(context.contentResolver, this)
+} else {
+    val source = ImageDecoder.createSource(context.contentResolver, this)
+    ImageDecoder.decodeBitmap(source)
 }
 
 fun Context.saveBitmap(bitmap: Bitmap, displayName: String) {
