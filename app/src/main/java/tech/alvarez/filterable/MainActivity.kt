@@ -14,6 +14,7 @@ import com.huawei.hms.image.vision.ImageVision
 import com.huawei.hms.image.vision.ImageVision.VisionCallBack
 import com.huawei.hms.image.vision.ImageVisionImpl
 import com.huawei.hms.image.vision.bean.ImageVisionResult
+import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -81,7 +82,16 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        binding.slider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+        binding.intensitySlider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+            override fun onStartTrackingTouch(slider: Slider) {
+            }
+
+            override fun onStopTrackingTouch(slider: Slider) {
+                startFilter()
+            }
+        })
+
+        binding.compressRateSlider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
             override fun onStartTrackingTouch(slider: Slider) {
             }
 
@@ -91,9 +101,11 @@ class MainActivity : AppCompatActivity() {
         })
 
         binding.saveButton.setOnClickListener {
-            val bitmap = (binding.photoImageView.drawable as BitmapDrawable).bitmap
-            saveBitmap(bitmap, "other")
-            toast("Saved!")
+            binding.photoImageView.drawable?.let {
+                val bitmap = (it as BitmapDrawable).bitmap
+                saveBitmap(bitmap, "other")
+                toast("Saved!")
+            }
         }
 
         initImageVision()
@@ -132,10 +144,11 @@ class MainActivity : AppCompatActivity() {
 
     fun startFilter() {
         binding.photoImageView.setImageURI(baseUri)
-        val intensity = binding.slider.value
-        val bitmap = binding.photoImageView.drawable.toBitmap()
-        val config = prepareConfig(filter, 1F, intensity)
-        loadFilter(config, bitmap)
+        val intensity = binding.intensitySlider.value
+        val compressRate = binding.compressRateSlider.value
+        val bitmap = binding.photoImageView.drawable?.toBitmap()
+        val config = prepareConfig(filter, intensity, compressRate)
+        bitmap?.let { loadFilter(config, it) }
     }
 
     private fun prepareConfig(
@@ -144,7 +157,6 @@ class MainActivity : AppCompatActivity() {
         compress: Float = 1F
     ): JSONObject {
         val authJson = JSONObject(string)
-
         val taskJson = JSONObject()
         taskJson.put("intensity", intensity.toString())
         taskJson.put("filterType", filterType.toString())
@@ -163,6 +175,8 @@ class MainActivity : AppCompatActivity() {
                 imageVision.getColorFilter(config, bitmap)
             }
             binding.photoImageView.setImageBitmap(visionResult.image)
+            binding.intensitySlider.value = 1F
+            binding.compressRateSlider.value = 1F
             toast("${filters[filter]} ($filter)")
             log("Result: ${visionResult.response}, Code: ${visionResult.resultCode}")
         }

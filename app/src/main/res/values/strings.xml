@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Filterable</string>
+    <string name="intensity">Intensity</string>
+    <string name="compressRate">Compress Rate</string>
 </resources>

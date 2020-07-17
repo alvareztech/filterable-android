@@ -18,23 +18,59 @@
             android:layout_marginBottom="16dp"
             android:background="@color/colorAccent"
             android:contentDescription="@string/app_name"
-            app:layout_constraintBottom_toTopOf="@+id/slider"
+            app:layout_constraintBottom_toTopOf="@+id/intensitySlider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.slider.Slider
-            android:id="@+id/slider"
+            android:id="@+id/intensitySlider"
             android:layout_width="0dp"
-            android:layout_height="38dp"
-            android:layout_marginStart="16dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="72dp"
+            android:layout_marginBottom="8dp"
+            android:labelFor="@id/intensityTextView"
+            android:valueFrom="0.0"
+            android:valueTo="1.0"
+            app:layout_constraintBottom_toTopOf="@+id/compressRateSlider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/compressRateSlider"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginEnd="72dp"
             android:layout_marginBottom="16dp"
-            android:valueFrom="0.0"
+            android:labelFor="@id/compressRateTextView"
+            android:valueFrom="0.001"
             android:valueTo="1.0"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/intensityTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/intensity"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:layout_constraintStart_toStartOf="@+id/intensitySlider"
+            app:layout_constraintTop_toBottomOf="@+id/photoImageView" />
+
+        <TextView
+            android:id="@+id/compressRateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:text="@string/compressRate"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:layout_constraintStart_toStartOf="@+id/compressRateSlider"
+            app:layout_constraintTop_toBottomOf="@+id/intensitySlider" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -44,6 +80,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:src="@drawable/ic_save" />
+        android:src="@drawable/ic_save"
+        app:fabSize="mini" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
