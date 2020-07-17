@@ -3,6 +3,7 @@ package tech.alvarez.filterable
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -89,10 +90,16 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        initFilter()
+        binding.saveButton.setOnClickListener {
+            val bitmap = (binding.photoImageView.drawable as BitmapDrawable).bitmap
+            saveBitmap(bitmap, "other")
+            toast("Saved!")
+        }
+
+        initImageVision()
     }
 
-    private fun initFilter() {
+    private fun initImageVision() {
         val authJson = JSONObject(string)
 
         imageVision = ImageVision.getInstance(this)
